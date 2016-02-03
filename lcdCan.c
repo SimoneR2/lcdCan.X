@@ -8,6 +8,8 @@
 #include "idCan.h"
 #include "pic18f4480_config.h"
 CANmessage msg;
+unsigned char id = 0;
+unsigned char data = 0;
 
 __interrupt(high_priority) void ISR_Alta(void) {
     if (CANisRxReady()) { //Se il messaggio è arrivato
@@ -20,9 +22,18 @@ void configurazione(void);
 
 void main(void) {
     configurazione();
-    LCD_initialize(16); 
-    while (1){
-//        LCD_write_string(msg.identifier);
+    LCD_initialize(16);
+    while (1) {
+        id = msg.identifier;
+        data = msg.data[0];
+        LCD_goto_xy(1, 0);
+        LCD_write_message("id");
+        LCD_goto_xy(1, 3);
+        LCD_write_char(id);
+        LCD_goto_xy(2, 0);
+        LCD_write_char(data);
+        delay_ms(1000);
+        LCD_clear();
     }
 }
 

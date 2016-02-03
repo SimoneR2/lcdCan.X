@@ -1064,7 +1064,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "31120
 [v _PIR3bits `VS1896 ~T0 @X0 0 e@4004 ]
 [p mainexit ]
-"19 lcdCan.c
+"21 lcdCan.c
 [v _configurazione `(v ~T0 @X0 0 ef ]
 "28849 C:\Program Files (x86)\Microchip\xc8\v1.36\include\pic18f4480.h
 [v _LATA `Vuc ~T0 @X0 0 e@3977 ]
@@ -18833,120 +18833,164 @@ Version 3.2 HI-TECH Software Intermediate Code
 "10 lcdCan.c
 [v _msg `S2097 ~T0 @X0 1 e ]
 [; ;lcdCan.c: 10: CANmessage msg;
-[v F16326 `(v ~T0 @X0 1 tf ]
+"11
+[v _id `uc ~T0 @X0 1 e ]
+[i _id
+-> -> 0 `i `uc
+]
+[; ;lcdCan.c: 11: unsigned char id = 0;
 "12
-[v _ISR_Alta `IF16326 ~T48 @X0 1 e ]
+[v _data `uc ~T0 @X0 1 e ]
+[i _data
+-> -> 0 `i `uc
+]
+[; ;lcdCan.c: 12: unsigned char data = 0;
+[v F16328 `(v ~T0 @X0 1 tf ]
+"14
+[v _ISR_Alta `IF16328 ~T48 @X0 1 e ]
 {
-[; ;lcdCan.c: 12: __attribute__((interrupt("__high_priority"))) void ISR_Alta(void) {
+[; ;lcdCan.c: 14: __attribute__((interrupt("__high_priority"))) void ISR_Alta(void) {
 [e :U _ISR_Alta ]
 [f ]
-[; ;lcdCan.c: 13: if (CANisRxReady()) {
-"13
+[; ;lcdCan.c: 15: if (CANisRxReady()) {
+"15
 [e $ ! != -> ( _CANisRxReady ..  `i -> -> -> 0 `i `uc `i 2341  ]
 {
-[; ;lcdCan.c: 14: CANreceiveMessage(&msg);
-"14
-[e ( _CANreceiveMessage (1 &U _msg ]
-[; ;lcdCan.c: 15: PIR3bits.RXB0IF = 0;
-"15
-[e = . . _PIR3bits 0 0 -> -> 0 `i `uc ]
-[; ;lcdCan.c: 16: PIR3bits.RXB1IF = 0;
+[; ;lcdCan.c: 16: CANreceiveMessage(&msg);
 "16
-[e = . . _PIR3bits 0 1 -> -> 0 `i `uc ]
+[e ( _CANreceiveMessage (1 &U _msg ]
+[; ;lcdCan.c: 17: PIR3bits.RXB0IF = 0;
 "17
+[e = . . _PIR3bits 0 0 -> -> 0 `i `uc ]
+[; ;lcdCan.c: 18: PIR3bits.RXB1IF = 0;
+"18
+[e = . . _PIR3bits 0 1 -> -> 0 `i `uc ]
+"19
 }
 [e :U 2341 ]
-[; ;lcdCan.c: 17: }
-[; ;lcdCan.c: 18: }
-"18
+[; ;lcdCan.c: 19: }
+[; ;lcdCan.c: 20: }
+"20
 [e :UE 2340 ]
 }
-[; ;lcdCan.c: 19: void configurazione(void);
-"21
+[; ;lcdCan.c: 21: void configurazione(void);
+"23
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;lcdCan.c: 21: void main(void) {
+[; ;lcdCan.c: 23: void main(void) {
 [e :U _main ]
 [f ]
-[; ;lcdCan.c: 22: configurazione();
-"22
-[e ( _configurazione ..  ]
-[; ;lcdCan.c: 23: LCD_initialize(16);
-"23
-[e ( _LCD_initialize (1 -> -> 16 `i `uc ]
-[; ;lcdCan.c: 24: while (1){
+[; ;lcdCan.c: 24: configurazione();
 "24
+[e ( _configurazione ..  ]
+[; ;lcdCan.c: 25: LCD_initialize(16);
+"25
+[e ( _LCD_initialize (1 -> -> 16 `i `uc ]
+[; ;lcdCan.c: 26: while (1) {
+"26
 [e :U 2344 ]
 {
-"26
+[; ;lcdCan.c: 27: id = msg.identifier;
+"27
+[e = _id -> . _msg 0 `uc ]
+[; ;lcdCan.c: 28: data = msg.data[0];
+"28
+[e = _data *U + &U . _msg 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . _msg 1 `ui `ux ]
+[; ;lcdCan.c: 29: LCD_goto_xy(1, 0);
+"29
+[e ( _LCD_goto_xy (2 , -> -> 1 `i `uc -> -> 0 `i `uc ]
+[; ;lcdCan.c: 30: LCD_write_message("id");
+"30
+[e ( _LCD_write_message (1 :s 1C ]
+[; ;lcdCan.c: 31: LCD_goto_xy(1, 3);
+"31
+[e ( _LCD_goto_xy (2 , -> -> 1 `i `uc -> -> 3 `i `uc ]
+[; ;lcdCan.c: 32: LCD_write_char(id);
+"32
+[e ( _LCD_write_char (1 _id ]
+[; ;lcdCan.c: 33: LCD_goto_xy(2, 0);
+"33
+[e ( _LCD_goto_xy (2 , -> -> 2 `i `uc -> -> 0 `i `uc ]
+[; ;lcdCan.c: 34: LCD_write_char(data);
+"34
+[e ( _LCD_write_char (1 _data ]
+[; ;lcdCan.c: 35: delay_ms(1000);
+"35
+[e ( _delay_ms (1 -> -> 1000 `i `ui ]
+[; ;lcdCan.c: 36: LCD_clear();
+"36
+[e ( _LCD_clear ..  ]
+"37
 }
 [e :U 2343 ]
-"24
+"26
 [e $U 2344  ]
 [e :U 2345 ]
-[; ;lcdCan.c: 26: }
-[; ;lcdCan.c: 27: }
-"27
+[; ;lcdCan.c: 37: }
+[; ;lcdCan.c: 38: }
+"38
 [e :UE 2342 ]
 }
-"29
+"40
 [v _configurazione `(v ~T0 @X0 1 ef ]
 {
-[; ;lcdCan.c: 29: void configurazione(void) {
+[; ;lcdCan.c: 40: void configurazione(void) {
 [e :U _configurazione ]
 [f ]
-[; ;lcdCan.c: 30: CANInitialize(4, 6, 5, 1, 3, CAN_CONFIG_LINE_FILTER_OFF & CAN_CONFIG_SAMPLE_ONCE & CAN_CONFIG_ALL_VALID_MSG & CAN_CONFIG_DBL_BUFFER_ON);
-"30
-[e ( _CANInitialize (4 , , , , , -> -> 4 `i `uc -> -> 6 `i `uc -> -> 5 `i `uc -> -> 1 `i `uc -> -> 3 `i `uc -> & & & -> . `E15929 6 `i -> . `E15929 8 `i -> . `E15929 20 `i -> . `E15929 14 `i `E15929 ]
-[; ;lcdCan.c: 31: LATA = 0x00;
-"31
-[e = _LATA -> -> 0 `i `uc ]
-[; ;lcdCan.c: 32: TRISA = 0xff;
-"32
-[e = _TRISA -> -> 255 `i `uc ]
-[; ;lcdCan.c: 33: LATB = 0x00;
-"33
-[e = _LATB -> -> 0 `i `uc ]
-[; ;lcdCan.c: 34: TRISB = 0xff;
-"34
-[e = _TRISB -> -> 255 `i `uc ]
-[; ;lcdCan.c: 35: LATC = 0x00;
-"35
-[e = _LATC -> -> 0 `i `uc ]
-[; ;lcdCan.c: 36: TRISC = 0xff;
-"36
-[e = _TRISC -> -> 255 `i `uc ]
-[; ;lcdCan.c: 37: LATD = 0x00;
-"37
-[e = _LATD -> -> 0 `i `uc ]
-[; ;lcdCan.c: 38: TRISD = 0x00;
-"38
-[e = _TRISD -> -> 0 `i `uc ]
-[; ;lcdCan.c: 39: LATE = 0x00;
-"39
-[e = _LATE -> -> 0 `i `uc ]
-[; ;lcdCan.c: 40: TRISE = 0xFF;
-"40
-[e = _TRISE -> -> 255 `i `uc ]
-[; ;lcdCan.c: 41: PIR3bits.RXB1IF = 0;
+[; ;lcdCan.c: 41: CANInitialize(4, 6, 5, 1, 3, CAN_CONFIG_LINE_FILTER_OFF & CAN_CONFIG_SAMPLE_ONCE & CAN_CONFIG_ALL_VALID_MSG & CAN_CONFIG_DBL_BUFFER_ON);
 "41
-[e = . . _PIR3bits 0 1 -> -> 0 `i `uc ]
-[; ;lcdCan.c: 42: PIR3bits.RXB0IF = 0;
+[e ( _CANInitialize (4 , , , , , -> -> 4 `i `uc -> -> 6 `i `uc -> -> 5 `i `uc -> -> 1 `i `uc -> -> 3 `i `uc -> & & & -> . `E15929 6 `i -> . `E15929 8 `i -> . `E15929 20 `i -> . `E15929 14 `i `E15929 ]
+[; ;lcdCan.c: 42: LATA = 0x00;
 "42
-[e = . . _PIR3bits 0 0 -> -> 0 `i `uc ]
-[; ;lcdCan.c: 43: IPR3bits.RXB1IP = 1;
+[e = _LATA -> -> 0 `i `uc ]
+[; ;lcdCan.c: 43: TRISA = 0xff;
 "43
-[e = . . _IPR3bits 0 1 -> -> 1 `i `uc ]
-[; ;lcdCan.c: 44: IPR3bits.RXB0IP = 1;
+[e = _TRISA -> -> 255 `i `uc ]
+[; ;lcdCan.c: 44: LATB = 0x00;
 "44
-[e = . . _IPR3bits 0 0 -> -> 1 `i `uc ]
-[; ;lcdCan.c: 45: PIE3bits.RXB1IE = 1;
+[e = _LATB -> -> 0 `i `uc ]
+[; ;lcdCan.c: 45: TRISB = 0xff;
 "45
-[e = . . _PIE3bits 0 1 -> -> 1 `i `uc ]
-[; ;lcdCan.c: 46: PIE3bits.RXB0IE = 1;
+[e = _TRISB -> -> 255 `i `uc ]
+[; ;lcdCan.c: 46: LATC = 0x00;
 "46
-[e = . . _PIE3bits 0 0 -> -> 1 `i `uc ]
-[; ;lcdCan.c: 47: }
+[e = _LATC -> -> 0 `i `uc ]
+[; ;lcdCan.c: 47: TRISC = 0xff;
 "47
+[e = _TRISC -> -> 255 `i `uc ]
+[; ;lcdCan.c: 48: LATD = 0x00;
+"48
+[e = _LATD -> -> 0 `i `uc ]
+[; ;lcdCan.c: 49: TRISD = 0x00;
+"49
+[e = _TRISD -> -> 0 `i `uc ]
+[; ;lcdCan.c: 50: LATE = 0x00;
+"50
+[e = _LATE -> -> 0 `i `uc ]
+[; ;lcdCan.c: 51: TRISE = 0xFF;
+"51
+[e = _TRISE -> -> 255 `i `uc ]
+[; ;lcdCan.c: 52: PIR3bits.RXB1IF = 0;
+"52
+[e = . . _PIR3bits 0 1 -> -> 0 `i `uc ]
+[; ;lcdCan.c: 53: PIR3bits.RXB0IF = 0;
+"53
+[e = . . _PIR3bits 0 0 -> -> 0 `i `uc ]
+[; ;lcdCan.c: 54: IPR3bits.RXB1IP = 1;
+"54
+[e = . . _IPR3bits 0 1 -> -> 1 `i `uc ]
+[; ;lcdCan.c: 55: IPR3bits.RXB0IP = 1;
+"55
+[e = . . _IPR3bits 0 0 -> -> 1 `i `uc ]
+[; ;lcdCan.c: 56: PIE3bits.RXB1IE = 1;
+"56
+[e = . . _PIE3bits 0 1 -> -> 1 `i `uc ]
+[; ;lcdCan.c: 57: PIE3bits.RXB0IE = 1;
+"57
+[e = . . _PIE3bits 0 0 -> -> 1 `i `uc ]
+[; ;lcdCan.c: 58: }
+"58
 [e :UE 2346 ]
 }
+[a 1C 105 100 0 ]
+
